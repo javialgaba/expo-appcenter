@@ -12,13 +12,13 @@ import fs from "fs";
 import path from "path";
 
 export const withIosAppCenterConfigFile: ConfigPlugin<{
-  relativePath: string;
-}> = (config, { relativePath }) => {
+  iosAppSecret: string;
+}> = (config, { iosAppSecret }) => {
   return withXcodeProject(config, (config) => {
     config.modResults = setAppCenterConfigFile({
       projectRoot: config.modRequest.projectRoot,
       project: config.modResults,
-      appCenterConfigFileRelativePath: relativePath,
+      iosAppSecret,
     });
     return config;
   });
@@ -27,21 +27,24 @@ export const withIosAppCenterConfigFile: ConfigPlugin<{
 export function setAppCenterConfigFile({
   projectRoot,
   project,
-  appCenterConfigFileRelativePath,
+  iosAppSecret,
 }: {
   project: XcodeProject;
   projectRoot: string;
-  appCenterConfigFileRelativePath: string;
+  iosAppSecret: string;
 }): XcodeProject {
-  const appCenterConfigFilePath = path.resolve(
-    projectRoot,
-    appCenterConfigFileRelativePath
-  );
+  const iosAppCenterConfigContents = `
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "https://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+    <dict>
+    <key>AppSecret</key>
+    <string>${iosAppSecret}</string>
+    </dict>
+</plist>
+`.trim();
 
-  fs.copyFileSync(
-    appCenterConfigFilePath,
-    path.join(getSourceRoot(projectRoot), "AppCenter-Config.plist")
-  );
+  fs.writeFileSync(path.join(getSourceRoot(projectRoot), "AppCenter-Config.plist"), iosAppCenterConfigContents)
 
   const projectName = getProjectName(projectRoot);
   const plistFilePath = `${projectName}/AppCenter-Config.plist`;

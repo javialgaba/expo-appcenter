@@ -7,22 +7,9 @@ import {
 
 import { withAppCenterAppDelegate, withIosAppCenterConfigFile } from "./ios";
 
-const DEFAULT_ANDROID_APP_CENTER_CONFIG_PATH =
-  "appcenter/appcenter-config.json";
-const DEFAULT_IOS_APP_CENTER_CONFIG_PATH = "appcenter/AppCenter-Config.plist";
-
 interface PluginProps {
-  /**
-   * Custom location of `appcenter-config.json`,
-   * relative to project root
-   */
-  androidAppCenterPath?: string;
-  /**
-   * Custom location of `AppCenter-Config.plist`,
-   * relative to project root
-   */
-  iosAppCenterPath?: string;
-
+  iosAppSecret: string;
+  androidAppSecret: string;
   androidOptions?: AndroidProps;
 }
 
@@ -31,21 +18,21 @@ interface PluginProps {
  */
 const withAppCenter: ConfigPlugin<PluginProps> = (
   config,
-  { androidAppCenterPath, iosAppCenterPath, androidOptions = {} } = {}
+  { iosAppSecret, androidAppSecret, androidOptions = {} }
 ) => {
-  const resolvedAndroidConfigPath =
-    androidAppCenterPath || DEFAULT_ANDROID_APP_CENTER_CONFIG_PATH;
-
-  const resolvedIosConfigPath =
-    iosAppCenterPath || DEFAULT_IOS_APP_CENTER_CONFIG_PATH;
-
-  return withPlugins(config, [
+  if(!iosAppSecret && !androidAppSecret)
+    throw new Error("Please provide an `iosAppSecret` and `androidAppSecret`")
+  else if(!iosAppSecret)
+    throw new Error("Please provide an `iosAppSecret`")
+  else if(!androidAppSecret)
+    throw new Error("Please provide an `androidAppSecret`")
+  else return withPlugins(config, [
     // iOS
     withAppCenterAppDelegate,
     [
       withIosAppCenterConfigFile,
       {
-        relativePath: resolvedIosConfigPath,
+        iosAppSecret: iosAppSecret,
       },
     ],
     // Android
@@ -53,7 +40,7 @@ const withAppCenter: ConfigPlugin<PluginProps> = (
     [
       withAndroidAppCenterConfigFile,
       {
-        relativePath: resolvedAndroidConfigPath,
+        androidAppSecret: androidAppSecret,
       },
     ],
   ]);

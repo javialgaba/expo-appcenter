@@ -1,24 +1,23 @@
-import { ConfigPlugin } from "@expo/config-plugins";
-
-import { withCopyFile } from "../utils";
-import { DEFAULT_TARGET_PATH } from "./constants";
+import { ConfigPlugin, withDangerousMod } from "@expo/config-plugins";
+import fs from "fs/promises";
+import path from "path";
 
 /**
  * Copy `appcenter-config.json`
  */
 export const withAndroidAppCenterConfigFile: ConfigPlugin<{
-  relativePath: string;
-}> = (config, { relativePath }) => {
-  try {
-    return withCopyFile(config, {
-      platform: "android",
-      from: relativePath,
-      to: DEFAULT_TARGET_PATH,
-    });
-  } catch (e) {
-    throw new Error(
-      `Cannot copy appcenter-config.json, because the file ${relativePath} doesn't exist. 
-      Please provide a valid path in \`app.json\`.`
-    );
-  }
+  androidAppSecret: string;
+}> = (config, { androidAppSecret }) => {
+  const androidAppCenterConfigContents = JSON.stringify({"app_secret": androidAppSecret });
+
+  return withDangerousMod(config, [
+    "android",
+    async (config) => {
+      await fs.writeFile(
+        path.join(config.modRequest.platformProjectRoot, "app/src/main/assets/appcenter-config.json"), 
+        androidAppCenterConfigContents
+      )
+      return config;
+    }
+  ])
 };
