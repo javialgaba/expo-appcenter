@@ -13,11 +13,31 @@ export const withAndroidAppCenterConfigFile: ConfigPlugin<{
   return withDangerousMod(config, [
     "android",
     async (config) => {
+      const androidAssetsPath = path.join(config.modRequest.platformProjectRoot, "app/src/main/assets");
+
+      if(!await fileOrFolderExists(androidAssetsPath)) {
+        await fs.mkdir(androidAssetsPath, { recursive: true });
+      }
+
       await fs.writeFile(
-        path.join(config.modRequest.platformProjectRoot, "app/src/main/assets/appcenter-config.json"), 
+        path.join(androidAssetsPath, "appcenter-config.json"), 
         androidAppCenterConfigContents
       )
       return config;
     }
   ])
 };
+
+/** Returns whether or not a file or folder exists */
+async function fileOrFolderExists(filename: string) {
+  try {
+    await fs.access(filename);
+    return true;
+  } catch (err) {
+    if ((err as any).code === "ENOENT") {
+      return false;
+    } else {
+      throw err;
+    }
+  }
+}
