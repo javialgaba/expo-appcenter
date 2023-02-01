@@ -3,6 +3,7 @@
 # expo-appcenter
 
 Expo plugin for react native appcenter SDK
+
 # API documentation
 
 - [Documentation for the master branch](https://github.com/expo/expo/blob/master/docs/pages/versions/unversioned/sdk/appcenter.md)
@@ -38,10 +39,10 @@ expo install expo-appcenter
 
 ```sh
 # using yarn
-yarn add expo-appcenter
+yarn add @armster/expo-appcenter
 
 # using npm
-npm install expo-appcenter
+npm install @armster/expo-appcenter
 ```
 
 Open your `app.json` and update your `plugins` section (`expo install` would do it for you):
@@ -50,17 +51,16 @@ Open your `app.json` and update your `plugins` section (`expo install` would do 
 {
   "plugins": [
     [
-      "expo-appcenter",
+      "@armster/expo-appcenter",
       {
         "iosAppSecret": "<ios_app_secret>",
-        "androidAppSecret": "<android_app_secret>",
+        "androidAppSecret": "<android_app_secret>"
       }
     ]
   ]
 }
 ```
 
-
 # Contributing
 
-Contributions are very welcome! Please refer to guidelines described in the [contributing guide]( https://github.com/expo/expo#contributing).
+Contributions are very welcome! Please refer to guidelines described in the [contributing guide](https://github.com/expo/expo#contributing).

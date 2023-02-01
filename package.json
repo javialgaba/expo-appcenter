@@ -1,5 +1,5 @@
 {
-  "name": "expo-appcenter",
+  "name": "@armster/expo-appcenter",
   "version": "0.1.2",
   "description": "Expo plugin for react native appcenter SDK",
   "main": "app.plugin.js",
