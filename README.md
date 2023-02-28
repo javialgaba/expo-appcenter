@@ -1,8 +1,8 @@
-# This is a fork of https://github.com/BelkaLab/expo-appcenter. The difference is that with this fork, you provide the secrets through the plugin config, while in the original repo you provide it by creating files with the secrets.
-
 # expo-appcenter
 
 Expo plugin for react native appcenter SDK
+
+Note: [This is a fork of BelkaLab's `expo-appcenter`](https://github.com/BelkaLab/expo-appcenter). The difference is that with this fork, you provide the secrets through the plugin config, while in the original repo you provide it by creating files with the secrets. Aside from that, this fork will continue to be updated as required.
 
 # API documentation
 
