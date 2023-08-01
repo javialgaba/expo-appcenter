@@ -21,7 +21,7 @@ For bare React Native projects, you must ensure that you have [installed and con
 
 #### Prerequisites:
 
-- App project using Expo SDK 41+.
+- App project using Expo SDK 49+.
 - Installed `expo-cli@4.4.4` or later.
 - Installed `appcenter` JavaScript libraries:
 
